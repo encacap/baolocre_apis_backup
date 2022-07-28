@@ -1,0 +1,52 @@
+name: Build To Production
+
+on:
+    push:
+        branches: ['master']
+    workflow_dispatch:
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Install NodeJs
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+
+            - name: Install & Build
+              run: |
+                  npm install yarn
+                  rm package-lock.json
+                  sed -i -e '2d' .gitignore
+                  yarn install
+                  yarn build
+
+            - name: Deploy
+              uses: JamesIves/github-pages-deploy-action@v4.4.0
+              with:
+                  branch: production
+                  folder: .
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: SSH to EC2 Server
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_KEY }}
+                  port: ${{ secrets.SSH_PORT }}
+                  script_stop: true
+                  script: |
+                      eval `ssh-agent`
+                      ssh-add ~/.ssh/github
+                      cd baolocre_apis_dev
+                      git pull origin production
+                      yarn install
