@@ -20,6 +20,8 @@ jobs:
       - name: Install & Build
         run: | 
           npm install yarn
+          rm package-lock.json
+          rm .gitignore
           yarn install
           yarn build
 
