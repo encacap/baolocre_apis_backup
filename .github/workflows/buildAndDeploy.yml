@@ -31,6 +31,8 @@ jobs:
                   branch: production
                   folder: .
     deploy:
+        needs:
+            - build
         runs-on: ubuntu-latest
 
         steps:
