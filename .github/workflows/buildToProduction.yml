@@ -21,6 +21,7 @@ jobs:
         run: | 
           npm install yarn
           rm package-lock.json
+          sed -e '2d' .gitignore
           yarn install
           yarn build
 
