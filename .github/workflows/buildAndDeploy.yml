@@ -25,13 +25,13 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3.1.0
-          with:
-            name: build-artifact
-            path: |
-              dist
-              nest-cli.json
-              package.json
-            retention-days: 1
+        with:
+          name: build-artifact
+          path: |
+            dist
+            nest-cli.json
+            package.json
+          retention-days: 1
 
   deploy:
     needs:
