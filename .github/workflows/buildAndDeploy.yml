@@ -53,5 +53,5 @@ jobs:
                   username: ${{ secrets.SSH_USERNAME }}
                   key: ${{ secrets.SSH_KEY }}
                   port: ${{ secrets.SSH_PORT }}
-                  src: 'dist, nest-cli.json, package.json'
+                  source: 'dist, nest-cli.json, package.json'
                   target: '/home/${{ secrets.SSH_USERNAME }}/baolocre_apis_dev_test'
