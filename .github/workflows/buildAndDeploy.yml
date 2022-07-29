@@ -54,4 +54,17 @@ jobs:
                   key: ${{ secrets.SSH_KEY }}
                   port: ${{ secrets.SSH_PORT }}
                   source: 'dist, nest-cli.json, package.json'
-                  target: '/home/${{ secrets.SSH_USERNAME }}/baolocre_apis_dev_test'
+                  target: '/home/${{ secrets.SSH_USERNAME }}/baolocre_apis_dev'
+
+            - name: SSH to EC2 Server
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  key: ${{ secrets.SSH_KEY }}
+                  port: ${{ secrets.SSH_PORT }}
+                  script_stop: true
+                  script: |
+                      cd baolocre_apis_dev
+                      yarn install
+                      pm2 start ecosystem.config.js
