@@ -1,54 +1,56 @@
-name: Build To Production
+name: Build And Deploy
 
 on:
-    push:
-        branches: ['master']
-    workflow_dispatch:
+  push:
+    branches: ['master']
+  workflow_dispatch:
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-            - name: Install NodeJs
-              uses: actions/setup-node@v3
-              with:
-                  node-version: 18
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-            - name: Install & Build
-              run: |
-                  npm install yarn
-                  rm package-lock.json
-                  sed -i -e '2d' .gitignore
-                  yarn install
-                  yarn build
+      - name: Install & Build
+        run: |
+          npm install yarn
+          yarn install
+          yarn build
 
-            - name: Deploy
-              uses: JamesIves/github-pages-deploy-action@v4.4.0
-              with:
-                  branch: production
-                  folder: .
-    deploy:
-        needs:
-            - build
-        runs-on: ubuntu-latest
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3.1.0
+          with:
+            name: build-artifact
+            path: |
+              dist
+              nest-cli.json
+              package.json
 
-        steps:
-            - uses: actions/checkout@v3
+  deploy:
+    needs:
+      - build
+    runs-on: ubuntu-latest
 
-            - name: SSH to EC2 Server
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.SSH_HOST }}
-                  username: ${{ secrets.SSH_USERNAME }}
-                  key: ${{ secrets.SSH_KEY }}
-                  port: ${{ secrets.SSH_PORT }}
-                  script_stop: true
-                  script: |
-                      eval `ssh-agent`
-                      ssh-add ~/.ssh/github
-                      cd baolocre_apis_dev
-                      git pull origin production
-                      yarn install
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifact
+
+      - name: SCP to EC2 Server
+        uses: appleboy/scp-action@v0.1.3
+          with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USERNAME }}
+            key: ${{ secrets.SSH_KEY }}
+            port: ${{ secrets.SSH_PORT }}
+            src: "dist, nest-cli.json, package.json"
+            target: "/home/${{ secrets.SSH_USERNAME }}/baolocre_apis_dev_test"
