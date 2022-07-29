@@ -25,8 +25,8 @@ jobs:
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3.1.0
+          name: build-artifact
           with:
-            name: build-artifact
             path: |
               dist
               nest-cli.json
