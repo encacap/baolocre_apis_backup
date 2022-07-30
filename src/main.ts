@@ -13,6 +13,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
 
+  app.enableCors({
+    origin: '*',
+  });
+
   await app.listen(PORT);
 }
 bootstrap();
