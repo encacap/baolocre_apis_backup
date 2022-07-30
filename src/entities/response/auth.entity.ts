@@ -8,7 +8,7 @@ export class AuthResponseEntity {
   readonly refreshToken: string;
 
   constructor(user, accessToken: string, refreshToken: string) {
-    this.user = user?.toObject() || user;
+    this.user = user;
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
   }
