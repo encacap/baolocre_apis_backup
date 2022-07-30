@@ -13,9 +13,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AnyFilesInterceptor, FileInterceptor } from '@nestjs/platform-express';
-import { GetDirectUploadURLEntity } from 'src/entities/image/getDirectUploadURL.entity';
-import { ImageDirectUploadURLEntity } from 'src/entities/image/imageDirectUploadURL.entity';
-import { UploadImageRequestEntity } from 'src/entities/image/uploadImageRequestEntity';
+import { GetDirectUploadURLEntity } from 'src/entities/request/getDirectUploadURL.entity';
+import { UploadImageRequestEntity } from 'src/entities/request/uploadImage.entity';
+import { ImageDirectUploadURLEntity } from 'src/entities/response/imageDirectUploadURL.entity';
 import { ImageService } from './image.service';
 
 @UseGuards(AuthGuard('jwt'))

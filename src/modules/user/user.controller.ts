@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from 'src/core/role.guard';
 import { Roles } from 'src/decorators/role.decorator';
 import { RoleEnum } from 'src/interfaces/enums';
-import { CreateUserEntity } from '../../entities/user/createUser.entity';
+import { CreateUserEntity } from '../../entities/request/createUser.entity';
 
 @Controller('users')
 export class UserController {
