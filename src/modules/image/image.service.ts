@@ -10,60 +10,60 @@ import { Image, ImageDocument } from './image.model';
 
 @Injectable()
 export class ImageService {
-    constructor(
-        private readonly httpService: HttpService,
-        @InjectModel(Image.name) private readonly imageModel: Model<ImageDocument>,
-    ) {}
+  constructor(
+    private readonly httpService: HttpService,
+    @InjectModel(Image.name) private readonly imageModel: Model<ImageDocument>,
+  ) {}
 
-    async getDirectUploadURL(postType: ImageFolderEnum, user: UserDocument, postId: string) {
-        try {
-            const fileName = this.generateFileName(postType, user.id, postId);
-            const response = await lastValueFrom(this.httpService.post('v2/direct_upload'));
-            const uploadURL = response.data.result.uploadURL;
-            return {
-                uploadURL,
-                fileName,
-            };
-        } catch (error) {
-            throw new BadRequestException(error.message);
-        }
+  async getDirectUploadURL(postType: ImageFolderEnum, user: UserDocument, postId: string) {
+    try {
+      const fileName = this.generateFileName(postType, user.id, postId);
+      const response = await lastValueFrom(this.httpService.post('v2/direct_upload'));
+      const uploadURL = response.data.result.uploadURL;
+      return {
+        uploadURL,
+        fileName,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
     }
+  }
 
-    async uploadImage(file: Express.Multer.File, folder: ImageFolderEnum, userId: string, postId?: string) {
-        try {
-            const fileName = this.generateFileName(folder, userId, postId);
-            const formData = new FormData();
+  async uploadImage(file: Express.Multer.File, folder: ImageFolderEnum, userId: string, postId?: string) {
+    try {
+      const fileName = this.generateFileName(folder, userId, postId);
+      const formData = new FormData();
 
-            formData.append('file', file.buffer, {
-                filename: fileName,
-            });
+      formData.append('file', file.buffer, {
+        filename: fileName,
+      });
 
-            const response = await lastValueFrom(this.httpService.post('v1', formData));
+      const response = await lastValueFrom(this.httpService.post('v1', formData));
 
-            const uploadedImageData = response.data.result;
+      const uploadedImageData = response.data.result;
 
-            const newImage = new this.imageModel({
-                _id: fileName.split('_').at(-1),
-                filename: uploadedImageData.filename,
-                variants: uploadedImageData.variants,
-                requireSignedURLs: uploadedImageData.requireSignedURLs,
-                user: userId,
-                folder,
-            });
+      const newImage = new this.imageModel({
+        _id: fileName.split('_').at(-1),
+        filename: uploadedImageData.filename,
+        variants: uploadedImageData.variants,
+        requireSignedURLs: uploadedImageData.requireSignedURLs,
+        user: userId,
+        folder,
+      });
 
-            return newImage.save();
-        } catch (error) {
-            throw new BadRequestException(error?.message || error?.response?.data);
-        }
+      return newImage.save();
+    } catch (error) {
+      throw new BadRequestException(error?.message || error?.response?.data);
     }
+  }
 
-    async uploadImages(files: Express.Multer.File[], folder: ImageFolderEnum, userId: string, postId?: string) {
-        const images = await Promise.all(files.map((file) => this.uploadImage(file, folder, userId, postId)));
-        return images;
-    }
+  async uploadImages(files: Express.Multer.File[], folder: ImageFolderEnum, userId: string, postId?: string) {
+    const images = await Promise.all(files.map((file) => this.uploadImage(file, folder, userId, postId)));
+    return images;
+  }
 
-    private generateFileName(postType: ImageFolderEnum, userId: string, postId?: string) {
-        const imageId = new mongoose.Types.ObjectId().toString();
-        return `${postType}_${userId}_${postId || 'unknown'}_${imageId}`;
-    }
+  private generateFileName(postType: ImageFolderEnum, userId: string, postId?: string) {
+    const imageId = new mongoose.Types.ObjectId().toString();
+    return `${postType}_${userId}_${postId || 'unknown'}_${imageId}`;
+  }
 }

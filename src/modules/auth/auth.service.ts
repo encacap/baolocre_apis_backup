@@ -7,63 +7,63 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
+  constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
 
-    async validateUser(email: string, password: string) {
-        const user = await this.userService.findOneByEmail(email);
+  async validateUser(email: string, password: string) {
+    const user = await this.userService.findOneByEmail(email);
 
-        if (!user) {
-            return null;
-        }
-
-        const isMatched = await this.comparePassword(password, user.password);
-
-        if (!isMatched) {
-            return null;
-        }
-
-        return user;
+    if (!user) {
+      return null;
     }
 
-    public async login(user: UserDocument) {
-        const authTokens = await this.tokenService.generateAuthTokens(user);
-        return {
-            user,
-            ...authTokens,
-        };
+    const isMatched = await this.comparePassword(password, user.password);
+
+    if (!isMatched) {
+      return null;
     }
 
-    public async register(user) {
-        const hashedPassword = await this.hashPassword(user.password);
+    return user;
+  }
 
-        const existingUser = await this.userService.findOneByEmail(user.email);
+  public async login(user: UserDocument) {
+    const authTokens = await this.tokenService.generateAuthTokens(user);
+    return {
+      user,
+      ...authTokens,
+    };
+  }
 
-        if (existingUser) {
-            throw new UnauthorizedException();
-        }
+  public async register(user) {
+    const hashedPassword = await this.hashPassword(user.password);
 
-        const newUser = await this.userService.create({
-            ...user,
-            password: hashedPassword,
-        });
+    const existingUser = await this.userService.findOneByEmail(user.email);
 
-        const authTokens = await this.tokenService.generateAuthTokens(newUser);
-
-        return {
-            user: omit(newUser, 'password'),
-            ...authTokens,
-        };
+    if (existingUser) {
+      throw new UnauthorizedException();
     }
 
-    public async refresh(refreshToken) {
-        return this.tokenService.generateAuthTokensFromRefreshToken(refreshToken);
-    }
+    const newUser = await this.userService.create({
+      ...user,
+      password: hashedPassword,
+    });
 
-    private async comparePassword(inputPassword: string, userPassword: string) {
-        return bcryptjs.compare(inputPassword, userPassword);
-    }
+    const authTokens = await this.tokenService.generateAuthTokens(newUser);
 
-    private hashPassword(password: string) {
-        return bcryptjs.hash(password, 10);
-    }
+    return {
+      user: omit(newUser, 'password'),
+      ...authTokens,
+    };
+  }
+
+  public async refresh(refreshToken) {
+    return this.tokenService.generateAuthTokensFromRefreshToken(refreshToken);
+  }
+
+  private async comparePassword(inputPassword: string, userPassword: string) {
+    return bcryptjs.compare(inputPassword, userPassword);
+  }
+
+  private hashPassword(password: string) {
+    return bcryptjs.hash(password, 10);
+  }
 }

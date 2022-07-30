@@ -11,33 +11,33 @@ import { UserModule } from './modules/user/user.module';
 import { TokenModule } from './modules/token/token.module';
 
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            envFilePath: ['.env.development', '.env.production'],
-            validate: envValidation,
-            expandVariables: true,
-            isGlobal: true,
-        }),
-        MongooseModule.forRootAsync({
-            imports: [ConfigModule],
-            useFactory: async (configService: ConfigService) => ({
-                uri: configService.get('MONGO_URL'),
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            }),
-            inject: [ConfigService],
-        }),
-        UserModule,
-        AuthModule,
-        ImageModule,
-        TokenModule,
-    ],
-    controllers: [UserController],
-    providers: [
-        {
-            provide: APP_GUARD,
-            useClass: RoleGuard,
-        },
-    ],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.development', '.env.production'],
+      validate: envValidation,
+      expandVariables: true,
+      isGlobal: true,
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('MONGO_URL'),
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }),
+      inject: [ConfigService],
+    }),
+    UserModule,
+    AuthModule,
+    ImageModule,
+    TokenModule,
+  ],
+  controllers: [UserController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RoleGuard,
+    },
+  ],
 })
 export class AppModule {}

@@ -5,24 +5,24 @@ import { RoleEnum } from 'src/interfaces/enums';
 
 @Exclude()
 export class CreateUserEntity {
-    @Expose()
-    @IsEmail()
-    email: string;
+  @Expose()
+  @IsEmail()
+  email: string;
 
-    @Expose()
-    @IsNotEmpty()
-    @MinLength(6)
-    @MaxLength(20)
-    password: string;
+  @Expose()
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(20)
+  password: string;
 
-    @Expose()
-    @IsNotEmpty()
-    firstName: string;
+  @Expose()
+  @IsNotEmpty()
+  firstName: string;
 
-    @Expose()
-    @IsNotEmpty()
-    lastName: string;
+  @Expose()
+  @IsNotEmpty()
+  lastName: string;
 
-    @Optional()
-    roles: RoleEnum[];
+  @Optional()
+  roles: RoleEnum[];
 }

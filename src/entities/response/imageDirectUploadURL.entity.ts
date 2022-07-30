@@ -1,4 +1,4 @@
 export class ImageDirectUploadURLEntity {
-    uploadURL: string;
-    fileName: string;
+  uploadURL: string;
+  fileName: string;
 }

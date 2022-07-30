@@ -7,16 +7,16 @@ import { CreateUserEntity } from '../../entities/request/createUser.entity';
 
 @Controller('users')
 export class UserController {
-    @UseGuards(AuthGuard('jwt'))
-    @Get()
-    findAll(): string {
-        return 'This action returns all users';
-    }
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  findAll(): string {
+    return 'This action returns all users';
+  }
 
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Roles(RoleEnum.USER)
-    @Post()
-    create(@Body() createUserDto: CreateUserEntity): CreateUserEntity {
-        return createUserDto;
-    }
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Roles(RoleEnum.USER)
+  @Post()
+  create(@Body() createUserDto: CreateUserEntity): CreateUserEntity {
+    return createUserDto;
+  }
 }
