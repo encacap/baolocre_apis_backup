@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { TokenTypeEnum } from 'src/interfaces/enums';
 import { UserDocument } from '../user/user.model';
+import { UserService } from '../user/user.service';
 import { Token, TokenDocument } from './token.model';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class TokenService {
         @InjectModel(Token.name) private tokenModel: Model<TokenDocument>,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
+        private readonly userService: UserService,
     ) {}
 
     async generateAuthTokens(user: UserDocument) {
@@ -22,6 +24,24 @@ export class TokenService {
         return {
             accessToken,
             refreshToken,
+        };
+    }
+
+    async generateAuthTokensFromRefreshToken(refreshToken: string) {
+        const tokenPayload = await this.jwtService.verify(refreshToken);
+        const user = await this.userService.findOneById(tokenPayload.id);
+        const savedRefreshToken = await this.tokenModel.findOne({
+            userId: user.id,
+            token: refreshToken,
+        });
+        if (!user || !savedRefreshToken) {
+            throw new UnauthorizedException();
+        }
+        const accessToken = await this.generateAccessToken(user, savedRefreshToken.sessionId);
+        return {
+            user,
+            refreshToken: savedRefreshToken.token,
+            accessToken,
         };
     }
 
@@ -38,7 +58,7 @@ export class TokenService {
             {
                 id: user.id,
                 email: user.email,
-                loginSessionId,
+                sessionId: loginSessionId,
             },
             {
                 expiresIn: `${this.configService.get('JWT_REFRESH_EXPIRATION_DAYS')}d`,

@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { LoginResponseEntity } from 'src/entities/auth/loginResponse.entity';
+import { RefreshTokenRequestEntity } from 'src/entities/auth/refreshTokenRequest.entity';
 import { CreateUserEntity } from '../../entities/user/createUser.entity';
 import { AuthService } from './auth.service';
 
@@ -27,5 +28,10 @@ export class AuthController {
     @Post('register')
     async register(@Body() user: CreateUserEntity) {
         return this.authService.register(user);
+    }
+
+    @Post('refresh')
+    async refresh(@Body() { refreshToken }: RefreshTokenRequestEntity) {
+        return this.authService.refresh(refreshToken);
     }
 }

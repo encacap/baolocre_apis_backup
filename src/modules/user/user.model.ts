@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
 import { RoleEnum } from 'src/interfaces/enums';
 
 export interface UserDocument extends User, Document {

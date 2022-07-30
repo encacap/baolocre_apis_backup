@@ -55,6 +55,10 @@ export class AuthService {
         };
     }
 
+    public async refresh(refreshToken) {
+        return this.tokenService.generateAuthTokensFromRefreshToken(refreshToken);
+    }
+
     private async comparePassword(inputPassword: string, userPassword: string) {
         return bcryptjs.compare(inputPassword, userPassword);
     }

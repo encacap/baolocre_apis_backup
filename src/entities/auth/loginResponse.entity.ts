@@ -1,14 +1,12 @@
-import { Type } from 'class-transformer';
-import { UserEntity } from '../user/user.entity';
+import { UserDocument } from 'src/modules/user/user.model';
 
 export class LoginResponseEntity {
-    @Type(() => UserEntity)
-    readonly user: UserEntity;
+    readonly user: UserDocument;
     readonly accessToken: string;
     readonly refreshToken: string;
 
-    constructor(user: UserEntity, accessToken: string, refreshToken: string) {
-        this.user = user;
+    constructor(user: UserDocument, accessToken: string, refreshToken: string) {
+        this.user = user.toObject();
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
