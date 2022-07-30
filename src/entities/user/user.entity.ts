@@ -11,9 +11,6 @@ export class UserEntity {
     @Exclude()
     password: string;
 
-    @Exclude()
-    __v: number;
-
     constructor(partial: Partial<UserEntity>) {
         Object.assign(this, partial);
     }

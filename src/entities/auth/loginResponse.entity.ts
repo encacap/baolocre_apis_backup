@@ -4,10 +4,12 @@ import { UserEntity } from '../user/user.entity';
 export class LoginResponseEntity {
     @Type(() => UserEntity)
     readonly user: UserEntity;
-    readonly authToken: string;
+    readonly accessToken: string;
+    readonly refreshToken: string;
 
-    constructor(user: UserEntity, authToken: string) {
+    constructor(user: UserEntity, accessToken: string, refreshToken: string) {
         this.user = user;
-        this.authToken = authToken;
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 }

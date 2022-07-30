@@ -1,13 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as bcryptjs from 'bcryptjs';
 import { omit } from 'lodash';
+import { TokenService } from '../token/token.service';
 import { UserDocument } from '../user/user.model';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly userService: UserService, private readonly jwtService: JwtService) {}
+    constructor(private readonly userService: UserService, private readonly tokenService: TokenService) {}
 
     async validateUser(email: string, password: string) {
         const user = await this.userService.findOneByEmail(email);
@@ -25,11 +25,11 @@ export class AuthService {
         return user;
     }
 
-    public async login(user) {
-        const authToken = await this.generateAuthToken(user);
+    public async login(user: UserDocument) {
+        const authTokens = await this.tokenService.generateAuthTokens(user);
         return {
             user,
-            authToken,
+            ...authTokens,
         };
     }
 
@@ -47,19 +47,12 @@ export class AuthService {
             password: hashedPassword,
         });
 
-        const authToken = await this.generateAuthToken(newUser);
+        const authTokens = await this.tokenService.generateAuthTokens(newUser);
 
         return {
             user: omit(newUser, 'password'),
-            authToken,
+            ...authTokens,
         };
-    }
-
-    private async generateAuthToken(user: UserDocument) {
-        return this.jwtService.sign({
-            id: user.id,
-            email: user.email,
-        });
     }
 
     private async comparePassword(inputPassword: string, userPassword: string) {

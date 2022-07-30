@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as FormData from 'form-data';
 import mongoose, { Model } from 'mongoose';
 import { lastValueFrom } from 'rxjs';
-import { ImageFolder } from 'src/interfaces/enums';
+import { ImageFolderEnum } from 'src/interfaces/enums';
 import { UserDocument } from '../user/user.model';
 import { Image, ImageDocument } from './image.model';
 
@@ -15,7 +15,7 @@ export class ImageService {
         @InjectModel(Image.name) private readonly imageModel: Model<ImageDocument>,
     ) {}
 
-    async getDirectUploadURL(postType: ImageFolder, user: UserDocument, postId: string) {
+    async getDirectUploadURL(postType: ImageFolderEnum, user: UserDocument, postId: string) {
         try {
             const fileName = this.generateFileName(postType, user.id, postId);
             const response = await lastValueFrom(this.httpService.post('v2/direct_upload'));
@@ -29,7 +29,7 @@ export class ImageService {
         }
     }
 
-    async uploadImage(file: Express.Multer.File, folder: ImageFolder, userId: string, postId?: string) {
+    async uploadImage(file: Express.Multer.File, folder: ImageFolderEnum, userId: string, postId?: string) {
         try {
             const fileName = this.generateFileName(folder, userId, postId);
             const formData = new FormData();
@@ -57,12 +57,12 @@ export class ImageService {
         }
     }
 
-    async uploadImages(files: Express.Multer.File[], folder: ImageFolder, userId: string, postId?: string) {
+    async uploadImages(files: Express.Multer.File[], folder: ImageFolderEnum, userId: string, postId?: string) {
         const images = await Promise.all(files.map((file) => this.uploadImage(file, folder, userId, postId)));
         return images;
     }
 
-    private generateFileName(postType: ImageFolder, userId: string, postId?: string) {
+    private generateFileName(postType: ImageFolderEnum, userId: string, postId?: string) {
         const imageId = new mongoose.Types.ObjectId().toString();
         return `${postType}_${userId}_${postId || 'unknown'}_${imageId}`;
     }

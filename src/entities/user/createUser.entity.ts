@@ -1,7 +1,7 @@
 import { Optional } from '@nestjs/common';
 import { Exclude, Expose } from 'class-transformer';
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
-import { Role } from 'src/interfaces/enums';
+import { RoleEnum } from 'src/interfaces/enums';
 
 @Exclude()
 export class CreateUserEntity {
@@ -24,5 +24,5 @@ export class CreateUserEntity {
     lastName: string;
 
     @Optional()
-    roles: Role[];
+    roles: RoleEnum[];
 }

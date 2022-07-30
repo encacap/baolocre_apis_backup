@@ -1,10 +1,10 @@
 import { IsEnum, IsMongoId, IsNotEmpty } from 'class-validator';
-import { ImageFolder } from 'src/interfaces/enums';
+import { ImageFolderEnum } from 'src/interfaces/enums';
 
 export class GetDirectUploadURLEntity {
     @IsNotEmpty()
-    @IsEnum([ImageFolder.ESTATE, ImageFolder.NEWS])
-    postType: ImageFolder;
+    @IsEnum([ImageFolderEnum.ESTATE, ImageFolderEnum.NEWS])
+    postType: ImageFolderEnum;
 
     @IsNotEmpty()
     @IsMongoId()

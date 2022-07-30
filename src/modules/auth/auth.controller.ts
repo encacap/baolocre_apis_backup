@@ -20,8 +20,8 @@ export class AuthController {
     @UseGuards(AuthGuard('local'))
     @Post('login')
     async login(@Request() req): Promise<LoginResponseEntity> {
-        const { user, authToken } = await this.authService.login(req.user);
-        return new LoginResponseEntity(user.toClient(), authToken);
+        const { user, accessToken, refreshToken } = await this.authService.login(req.user);
+        return new LoginResponseEntity(user, accessToken, refreshToken);
     }
 
     @Post('register')

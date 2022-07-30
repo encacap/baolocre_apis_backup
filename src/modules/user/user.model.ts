@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Role } from 'src/interfaces/enums';
+import { RoleEnum } from 'src/interfaces/enums';
 
 export interface UserDocument extends User, Document {
     id: string;
@@ -39,8 +39,8 @@ export class User {
     @Prop([
         {
             type: String,
-            enum: [Role.ADMIN, Role.USER],
-            default: [Role.USER],
+            enum: [RoleEnum.ADMIN, RoleEnum.USER],
+            default: [RoleEnum.USER],
         },
     ])
     roles: string[];

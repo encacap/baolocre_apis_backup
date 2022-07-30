@@ -1,9 +1,9 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Environment } from 'src/interfaces/enums';
+import { EnvironmentEnum } from 'src/interfaces/enums';
 
 export class EnvironmentVariableEntity {
-    @IsEnum(Environment)
-    NODE_ENV: Environment;
+    @IsEnum(EnvironmentEnum)
+    NODE_ENV: EnvironmentEnum;
 
     @IsNumber()
     PORT: number;

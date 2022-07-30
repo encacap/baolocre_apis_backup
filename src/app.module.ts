@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ImageModule } from './modules/image/image.module';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
+import { TokenModule } from './modules/token/token.module';
 
 @Module({
     imports: [
@@ -29,6 +30,7 @@ import { UserModule } from './modules/user/user.module';
         UserModule,
         AuthModule,
         ImageModule,
+        TokenModule,
     ],
     controllers: [UserController],
     providers: [

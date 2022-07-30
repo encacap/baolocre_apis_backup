@@ -1,15 +1,20 @@
-export enum Role {
+export enum RoleEnum {
     ADMIN = 'admin',
     USER = 'user',
 }
 
-export enum ImageFolder {
+export enum ImageFolderEnum {
     ESTATE = 'estate',
     NEWS = 'news',
     OTHER = 'other',
 }
 
-export enum Environment {
+export enum EnvironmentEnum {
     DEVELOPMENT = 'development',
     PRODUCTION = 'production',
+}
+
+export enum TokenTypeEnum {
+    AUTH = 'auth',
+    REFRESH = 'refresh',
 }
