@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { omit } from 'lodash';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './user.model';
 
@@ -23,5 +24,10 @@ export class UserService {
   async findOneByEmail(email: string) {
     const user = this.userModel.findOne({ email }).exec();
     return user;
+  }
+
+  public async getMe(user: UserDocument) {
+    const savedUser = await this.userModel.findById(user.id);
+    return omit(savedUser, 'password');
   }
 }

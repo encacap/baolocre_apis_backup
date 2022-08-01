@@ -37,6 +37,10 @@ export class TransformInterceptor<T> implements NestInterceptor<T, Response<T>> 
       return data;
     }
 
+    if ('toObject' in data) {
+      data = data.toObject();
+    }
+
     if ('_id' in data) {
       data.id = data._id;
       delete data._id;

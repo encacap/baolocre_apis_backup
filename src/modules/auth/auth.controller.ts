@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { RefreshTokenRequestEntity } from 'src/entities/request/refreshToken.entity';
 import { CreateUserEntity } from '../../entities/request/createUser.entity';
@@ -10,17 +10,20 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Request() req) {
+  @HttpCode(200)
+  login(@Request() req) {
     return this.authService.login(req.user);
   }
 
   @Post('register')
-  async register(@Body() user: CreateUserEntity) {
+  @HttpCode(201)
+  register(@Body() user: CreateUserEntity) {
     return this.authService.register(user);
   }
 
   @Post('refresh')
-  async refresh(@Body() { refreshToken: refreshTokenBody }: RefreshTokenRequestEntity) {
-    return this.authService.refresh(refreshTokenBody);
+  @HttpCode(200)
+  refreshToken(@Body() { refreshToken: refreshTokenBody }: RefreshTokenRequestEntity) {
+    return this.authService.refreshToken(refreshTokenBody);
   }
 }

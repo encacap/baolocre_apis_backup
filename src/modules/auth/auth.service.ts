@@ -55,7 +55,7 @@ export class AuthService {
     };
   }
 
-  public async refresh(refreshToken) {
+  public async refreshToken(refreshToken) {
     return this.tokenService.generateAuthTokensFromRefreshToken(refreshToken);
   }
 
