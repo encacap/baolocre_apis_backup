@@ -28,30 +28,59 @@ import { UserModule } from './modules/user/user.module';
       }),
       inject: [ConfigService],
     }),
-    LoggerModule.forRoot({
-      pinoHttp: {
-        transport: {
-          targets: [
-            {
-              level: 'info',
-              target: 'pino-pretty',
-              options: {
-                translateTime: true,
-                singleLine: true,
+    // LoggerModule.forRoot({
+    //   pinoHttp: {
+    //     transport: {
+    //       targets: [
+    //         {
+    //           level: 'info',
+    //           target: 'pino-pretty',
+    //           options: {
+    //             translateTime: true,
+    //             singleLine: true,
+    //           },
+    //         },
+    //         {
+    //           level: 'trace',
+    //           target: 'pino-pretty',
+    //           options: {
+    //             translateTime: true,
+    //             colorize: false,
+    //             destination: './logs/http.log',
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   },
+    // }),
+    LoggerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        pinoHttp: {
+          transport: {
+            targets: [
+              {
+                level: 'info',
+                target: 'pino-pretty',
+                options: {
+                  translateTime: true,
+                  singleLine: true,
+                },
               },
-            },
-            {
-              level: 'trace',
-              target: 'pino-pretty',
-              options: {
-                translateTime: true,
-                colorize: false,
-                destination: './logs/http.log',
+              {
+                level: 'trace',
+                target: 'pino-pretty',
+                options: {
+                  translateTime: true,
+                  colorize: false,
+                  destination: `./logs/${configService.get('NODE_ENV')}.log`,
+                },
               },
-            },
-          ],
+            ],
+          },
         },
-      },
+      }),
+      inject: [ConfigService],
     }),
     UserModule,
     AuthModule,
