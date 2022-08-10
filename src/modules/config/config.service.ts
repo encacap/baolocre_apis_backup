@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ContactInformationEntity } from 'src/entities/config/contactInformation.entity';
-import { Config } from 'src/models/config.model';
+import { Config, ConfigDocument } from 'src/models/config.model';
 
 @Injectable()
 export class ConfigService {
@@ -32,7 +32,7 @@ export class ConfigService {
 
   async getContactInformation() {
     const configs = await this.configModel.find({ key: { $in: this.contactInformationKeys } });
-    return configs.reduce((result, config) => {
+    return configs.reduce((result: ContactInformationEntity, config: ConfigDocument) => {
       result[config.key] = config.value;
       return result;
     }, {} as ContactInformationEntity);
