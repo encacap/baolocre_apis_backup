@@ -6,6 +6,7 @@ import { LoggerModule } from 'nestjs-pino';
 import envValidation from './core/env.validation';
 import { RoleGuard } from './core/role.guard';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConfigModule as LocalConfigModule } from './modules/config/config.module';
 import { ImageModule } from './modules/image/image.module';
 import { TokenModule } from './modules/token/token.module';
 import { UserController } from './modules/user/user.controller';
@@ -28,31 +29,6 @@ import { UserModule } from './modules/user/user.module';
       }),
       inject: [ConfigService],
     }),
-    // LoggerModule.forRoot({
-    //   pinoHttp: {
-    //     transport: {
-    //       targets: [
-    //         {
-    //           level: 'info',
-    //           target: 'pino-pretty',
-    //           options: {
-    //             translateTime: true,
-    //             singleLine: true,
-    //           },
-    //         },
-    //         {
-    //           level: 'trace',
-    //           target: 'pino-pretty',
-    //           options: {
-    //             translateTime: true,
-    //             colorize: false,
-    //             destination: './logs/http.log',
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   },
-    // }),
     LoggerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -86,6 +62,7 @@ import { UserModule } from './modules/user/user.module';
     AuthModule,
     ImageModule,
     TokenModule,
+    LocalConfigModule,
   ],
   controllers: [UserController],
   providers: [
