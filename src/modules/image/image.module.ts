@@ -2,8 +2,8 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Image, ImageSchema } from '../../models/image.model';
 import { ImageController } from './image.controller';
-import { Image, ImageSchema } from './image.model';
 import { ImageService } from './image.service';
 
 @Module({

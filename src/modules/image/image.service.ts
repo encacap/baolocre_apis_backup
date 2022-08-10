@@ -5,8 +5,8 @@ import * as FormData from 'form-data';
 import mongoose, { Model } from 'mongoose';
 import { lastValueFrom } from 'rxjs';
 import { ImageFolderEnum } from 'src/interfaces/enums';
-import { UserDocument } from '../user/user.model';
-import { Image, ImageDocument } from './image.model';
+import { Image, ImageDocument } from '../../models/image.model';
+import { UserDocument } from '../../models/user.model';
 
 @Injectable()
 export class ImageService {

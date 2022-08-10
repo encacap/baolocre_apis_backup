@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcryptjs from 'bcryptjs';
 import { omit } from 'lodash';
+import { UserDocument } from '../../models/user.model';
 import { TokenService } from '../token/token.service';
-import { UserDocument } from '../user/user.model';
 import { UserService } from '../user/user.service';
 
 @Injectable()

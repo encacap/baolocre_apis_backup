@@ -4,9 +4,9 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { TokenTypeEnum } from 'src/interfaces/enums';
-import { UserDocument } from '../user/user.model';
+import { Token, TokenDocument } from '../../models/token.model';
+import { UserDocument } from '../../models/user.model';
 import { UserService } from '../user/user.service';
-import { Token, TokenDocument } from './token.model';
 
 @Injectable()
 export class TokenService {

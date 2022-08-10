@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { omit } from 'lodash';
 import { Model } from 'mongoose';
-import { User, UserDocument } from './user.model';
+import { User, UserDocument } from '../../models/user.model';
 
 @Injectable()
 export class UserService {
