@@ -6,7 +6,7 @@ import { TransformInterceptor } from './core/response.interceptor';
 import { ValidationPipe } from './core/validation.pipe';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
   const PORT = configService.get('PORT');
