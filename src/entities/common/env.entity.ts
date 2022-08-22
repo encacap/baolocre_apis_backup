@@ -26,4 +26,7 @@ export class EnvironmentVariableEntity {
 
   @IsString()
   CLOUDFLARE_IMAGES_API_URL: string;
+
+  @IsString()
+  CLOUDFLARE_IMAGES_PREFIX: string;
 }

@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import * as FormData from 'form-data';
 import mongoose, { Model } from 'mongoose';
@@ -12,6 +13,7 @@ import { UserDocument } from '../../models/user.model';
 export class ImageService {
   constructor(
     private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
     @InjectModel(Image.name) private readonly imageModel: Model<ImageDocument>,
   ) {}
 
@@ -64,6 +66,8 @@ export class ImageService {
 
   private generateFileName(postType: ImageFolderEnum, userId: string, postId?: string) {
     const imageId = new mongoose.Types.ObjectId().toString();
-    return `${postType}_${userId}_${postId || 'unknown'}_${imageId}`;
+    return `${this.configService.get('CLOUDFLARE_IMAGES_PREFIX')}_${postType}_${userId}_${
+      postId || 'unknown'
+    }_${imageId}`;
   }
 }
