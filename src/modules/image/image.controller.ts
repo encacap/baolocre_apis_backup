@@ -59,7 +59,6 @@ export class ImageController {
     @Body() data: UploadImageRequestEntity,
     @Request() { user },
   ) {
-    console.log(files);
     return this.imageService.uploadImages(files, data.folder, user.id, data.postId);
   }
 }
