@@ -31,14 +31,35 @@ export class ImageService {
     }
   }
 
-  async uploadImage(file: Express.Multer.File, folder: ImageFolderEnum, userId: string, postId?: string) {
+  async uploadImageFile(
+    file: Express.Multer.File | string,
+    folder: ImageFolderEnum,
+    userId: string,
+    postId?: string,
+  ) {
     try {
       const fileName = this.generateFileName(folder, userId, postId);
       const formData = new FormData();
 
-      formData.append('file', file.buffer, {
-        filename: fileName,
-      });
+      if (typeof file !== 'string') {
+        formData.append('file', file.buffer, {
+          filename: fileName,
+        });
+      } else {
+        formData.append('url', file, {
+          filename: fileName,
+        });
+      }
+
+      formData.append(
+        'metadata',
+        JSON.stringify({
+          folder,
+          userId,
+          postId,
+          name: fileName,
+        }),
+      );
 
       const response = await lastValueFrom(this.httpService.post('v1', formData));
 
@@ -55,12 +76,21 @@ export class ImageService {
 
       return newImage.save();
     } catch (error) {
-      throw new BadRequestException(error?.message || error?.response?.data);
+      throw new BadRequestException(error?.response?.data || error?.message);
     }
   }
 
-  async uploadImages(files: Express.Multer.File[], folder: ImageFolderEnum, userId: string, postId?: string) {
-    const images = await Promise.all(files.map((file) => this.uploadImage(file, folder, userId, postId)));
+  async uploadImages(
+    files: Express.Multer.File[],
+    urls: string[],
+    folder: ImageFolderEnum,
+    userId: string,
+    postId?: string,
+  ) {
+    const images = await Promise.all([
+      ...files.map((file) => this.uploadImageFile(file, folder, userId, postId)),
+      ...urls.map((url) => this.uploadImageFile(url, folder, userId, postId)),
+    ]);
     return images;
   }
 

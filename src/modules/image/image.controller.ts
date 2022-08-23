@@ -48,7 +48,7 @@ export class ImageController {
     @Body() data: UploadImageRequestEntity,
     @Request() { user },
   ) {
-    return this.imageService.uploadImage(file, data.folder, user.id, data.postId);
+    return this.imageService.uploadImageFile(file, data.folder, user.id, data.postId);
   }
 
   @Post('upload/multiple')
@@ -59,6 +59,6 @@ export class ImageController {
     @Body() data: UploadImageRequestEntity,
     @Request() { user },
   ) {
-    return this.imageService.uploadImages(files, data.folder, user.id, data.postId);
+    return this.imageService.uploadImages(files, data.urls || [], data.folder, user.id, data.postId);
   }
 }

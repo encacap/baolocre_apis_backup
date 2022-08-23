@@ -1,4 +1,4 @@
-import { IsEnum, IsMongoId, IsOptional } from 'class-validator';
+import { IsArray, IsEnum, IsMongoId, IsOptional } from 'class-validator';
 import { ImageFolderEnum } from 'src/interfaces/enums';
 
 export class UploadImageRequestEntity {
@@ -8,4 +8,8 @@ export class UploadImageRequestEntity {
   @IsOptional()
   @IsMongoId()
   postId: string;
+
+  @IsOptional()
+  @IsArray()
+  urls: string[];
 }
