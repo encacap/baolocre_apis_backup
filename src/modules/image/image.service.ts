@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import * as FormData from 'form-data';
-import mongoose, { Model } from 'mongoose';
+import mongoose, { Model, ObjectId } from 'mongoose';
 import { lastValueFrom } from 'rxjs';
 import { ImageFolderEnum } from 'src/interfaces/enums';
 import { Image, ImageDocument } from '../../models/image.model';
@@ -92,6 +92,10 @@ export class ImageService {
       ...urls.map((url) => this.uploadImageFile(url, folder, userId, postId)),
     ]);
     return images;
+  }
+
+  async getImageByIds(ids: ObjectId[]) {
+    return this.imageModel.find({ _id: { $in: ids } });
   }
 
   private generateFileName(postType: ImageFolderEnum, userId: string, postId?: string) {

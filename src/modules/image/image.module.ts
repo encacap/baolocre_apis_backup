@@ -22,5 +22,6 @@ import { ImageService } from './image.service';
       inject: [ConfigService],
     }),
   ],
+  exports: [ImageService],
 })
 export class ImageModule {}

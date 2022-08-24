@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { uniq } from 'lodash';
+import { ObjectId } from 'mongoose';
 import { ContactInformationEntity } from 'src/entities/config/contactInformation.entity';
 import { Config, ConfigDocument } from 'src/models/config.model';
+import { ImageService } from '../image/image.service';
 
 @Injectable()
 export class ConfigService {
   contactInformationKeys: string[];
 
-  constructor(@InjectModel(Config.name) private readonly configModel) {
+  constructor(
+    @InjectModel(Config.name) private readonly configModel,
+    private readonly imageService: ImageService,
+  ) {
     this.contactInformationKeys = ['address', 'phoneNumber', 'zalo', 'facebook', 'youtube'];
   }
 
@@ -36,5 +42,28 @@ export class ConfigService {
       result[config.key] = config.value;
       return result;
     }, {} as ContactInformationEntity);
+  }
+
+  async getHomePageHeroImages() {
+    const configsStringified = await this.configModel.findOne({ key: 'homepageHeroImages' });
+    if (!configsStringified) {
+      return [];
+    }
+    const configParser = JSON.parse(configsStringified.value);
+    const images = await this.imageService.getImageByIds(configParser);
+    return images;
+  }
+
+  async addHomePageHeroImages(imageIds: ObjectId[]) {
+    const config = await this.configModel.findOne({ key: 'homepageHeroImages' });
+    if (!config) {
+      return this.configModel.create({ key: 'homepageHeroImages', value: JSON.stringify(imageIds) });
+    }
+    const parsedValue = JSON.parse(config.value);
+    parsedValue.push(...imageIds);
+    config.value = JSON.stringify(uniq(parsedValue));
+    await config.save();
+    const images = await this.imageService.getImageByIds(parsedValue);
+    return images;
   }
 }
