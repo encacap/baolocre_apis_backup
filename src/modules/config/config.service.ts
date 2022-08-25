@@ -66,4 +66,21 @@ export class ConfigService {
     const images = await this.imageService.getImageByIds(parsedValue);
     return images;
   }
+
+  async deleteHomePageHeroImages(imageId: ObjectId) {
+    const config = await this.configModel.findOne({ key: 'homepageHeroImages' });
+    if (!config) {
+      return;
+    }
+    const parsedValue = JSON.parse(config.value);
+    const index = parsedValue.indexOf(imageId);
+    if (index === -1) {
+      return;
+    }
+    parsedValue.splice(index, 1);
+    config.value = JSON.stringify(parsedValue);
+    await config.save();
+    const images = await this.imageService.getImageByIds(parsedValue);
+    return images;
+  }
 }
