@@ -17,12 +17,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install & Build
+      - name: Install
         uses: borales/actions-yarn@master
         with:
-          cmd: |
-            install
-            build
+          cmd: install
+
+      - name: Build
+        uses: borales/actions-yarn@master
+        with:
+          cmd: build
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3.1.0
