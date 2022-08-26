@@ -19,9 +19,10 @@ jobs:
 
       - name: Install & Build
         uses: borales/actions-yarn@master
-        run: |
-          install
-          build
+        with:
+          cmd: |
+            install
+            build
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3.1.0
