@@ -5,11 +5,11 @@ import { AddHomepageHeroImagesEntity } from 'src/entities/request/addHomepageHer
 import { DeleteHomageHeroImageEntity } from 'src/entities/request/deleteHomageHeroImage.entity';
 import { ConfigService } from './config.service';
 
-@UseGuards(AuthGuard('jwt'))
 @Controller('configs')
 export class ConfigController {
   constructor(private readonly configService: ConfigService) {}
 
+  @UseGuards(AuthGuard('jwt'))
   @Put('contact')
   async updateContactInformation(@Body() body: ContactInformationEntity) {
     return this.configService.updateContactInformation(body);
@@ -25,11 +25,13 @@ export class ConfigController {
     return this.configService.getHomePageHeroImages();
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Post('homepage-hero-images')
   async addHomePageHeroImages(@Body() { imageIds }: AddHomepageHeroImagesEntity) {
     return this.configService.addHomePageHeroImages(imageIds);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete('homepage-hero-images/:imageId')
   async deleteHomePageHeroImages(@Param() { imageId }: DeleteHomageHeroImageEntity) {
     return this.configService.deleteHomePageHeroImages(imageId);
