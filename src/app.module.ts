@@ -11,6 +11,7 @@ import { ImageModule } from './modules/image/image.module';
 import { TokenModule } from './modules/token/token.module';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
+import { EstateModule } from './modules/estate/estate.module';
 
 @Module({
   imports: [
@@ -63,6 +64,7 @@ import { UserModule } from './modules/user/user.module';
     ImageModule,
     TokenModule,
     LocalConfigModule,
+    EstateModule,
   ],
   controllers: [UserController],
   providers: [
