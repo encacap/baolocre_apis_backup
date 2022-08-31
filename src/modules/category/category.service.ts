@@ -9,7 +9,7 @@ export class CategoryService {
   constructor(@InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>) {}
 
   async getAllCategories(): Promise<CategoryDocument[]> {
-    return this.categoryModel.find();
+    return this.categoryModel.find().populate('image');
   }
 
   async createCategory(category: Category): Promise<CategoryDocument> {
