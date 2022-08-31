@@ -29,3 +29,8 @@ export enum EstateDirectionEnum {
   NORTH_EAST = 'northEast',
   NORTH_WEST = 'northWest',
 }
+
+export enum CategoryTypeEnum {
+  ESTATE = 'estate',
+  NEWS = 'news',
+}

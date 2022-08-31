@@ -12,6 +12,7 @@ import { TokenModule } from './modules/token/token.module';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
 import { EstateModule } from './modules/estate/estate.module';
+import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { EstateModule } from './modules/estate/estate.module';
     TokenModule,
     LocalConfigModule,
     EstateModule,
+    CategoryModule,
   ],
   controllers: [UserController],
   providers: [
