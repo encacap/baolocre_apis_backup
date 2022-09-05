@@ -22,7 +22,14 @@ export class CategoryService {
       const savedCategory = await newCategory.save();
       return savedCategory.populate('image');
     } catch (error) {
-      throw new BadRequestException(error.message);
+      throw new BadRequestException({
+        errors: [
+          {
+            field: 'name',
+            message: ['Tên danh mục đã tồn tại'],
+          },
+        ],
+      });
     }
   }
 }
