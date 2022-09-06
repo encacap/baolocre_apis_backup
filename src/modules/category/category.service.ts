@@ -32,4 +32,8 @@ export class CategoryService {
       });
     }
   }
+
+  async deleteCategoryById(id: string): Promise<void> {
+    await this.categoryModel.findByIdAndDelete(id);
+  }
 }
