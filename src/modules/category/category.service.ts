@@ -33,6 +33,17 @@ export class CategoryService {
     }
   }
 
+  async updateCategoryById(id: string, category: Category): Promise<CategoryDocument> {
+    const { slug, name } = category;
+    if (!slug) {
+      category.slug = getSlugFromString(name);
+    }
+    const updatedCategory = await this.categoryModel.findByIdAndUpdate(id, category, {
+      new: true,
+    });
+    return updatedCategory.populate('image');
+  }
+
   async deleteCategoryById(id: string): Promise<void> {
     await this.categoryModel.findByIdAndDelete(id);
   }
