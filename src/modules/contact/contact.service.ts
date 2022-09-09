@@ -8,7 +8,7 @@ export class ContactService {
   constructor(@InjectModel(Contact.name) private readonly contactModel: Model<ContactDocument>) {}
 
   async getContacts(): Promise<ContactDocument[]> {
-    return this.contactModel.find().populate('Image').exec();
+    return this.contactModel.find().populate('avatar').exec();
   }
 
   async createContact(createContactBody: Contact): Promise<ContactDocument> {

@@ -25,7 +25,6 @@ export class Contact {
   @IsString()
   @Prop({
     type: String,
-    unique: true,
   })
   email: string;
 
@@ -33,7 +32,6 @@ export class Contact {
   @IsString()
   @Prop({
     type: String,
-    unique: true,
   })
   zalo: string;
 
@@ -41,7 +39,6 @@ export class Contact {
   @IsString()
   @Prop({
     type: String,
-    unique: true,
   })
   facebook: string;
 
