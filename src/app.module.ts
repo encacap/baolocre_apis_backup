@@ -13,6 +13,7 @@ import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
 import { EstateModule } from './modules/estate/estate.module';
 import { CategoryModule } from './modules/category/category.module';
+import { ContactModule } from './modules/contact/contact.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { CategoryModule } from './modules/category/category.module';
     LocalConfigModule,
     EstateModule,
     CategoryModule,
+    ContactModule,
   ],
   controllers: [UserController],
   providers: [

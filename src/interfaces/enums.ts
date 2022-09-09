@@ -6,6 +6,7 @@ export enum RoleEnum {
 export enum ImageFolderEnum {
   ESTATE = 'estate',
   NEWS = 'news',
+  CONTACT = 'contact',
   OTHER = 'other',
 }
 
